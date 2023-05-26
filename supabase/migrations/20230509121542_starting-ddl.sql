@@ -5,3 +5,17 @@ CREATE TABLE records (
   tank_mark SMALLINT not null,
   kilometrage INT not null
 );
+
+CREATE POLICY "Enable read records for all users"
+ON "public"."records"
+AS PERMISSIVE FOR SELECT
+TO public
+USING (true);
+
+CREATE POLICY "Enable all methods for authenticated users only"
+ON "public"."records"
+AS PERMISSIVE FOR ALL
+TO authenticated
+USING (true);
+
+ALTER TABLE "public"."records" ENABLE ROW LEVEL SECURITY;

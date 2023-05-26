@@ -2,11 +2,15 @@
 
 import { useState } from "react";
 import { TrashIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
-import { useSupabase } from './supabase-provider'
 
-export default function RemoveRecord({ id }: { id: number }) {
-  const { supabase, session } = useSupabase()
+
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+
+import type { Session } from '@supabase/auth-helpers-nextjs'
+
+export default function RemoveRecord({ session, id }: { session: Session | null, id: number }) {
+  const supabase = createClientComponentClient()
 
   const [loading, setLoading] = useState(false);
   const [confirm, setConfirm] = useState(false);

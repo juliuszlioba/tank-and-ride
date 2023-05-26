@@ -1,12 +1,15 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { toFloat, toInt } from 'radash'
-import { useSupabase } from './supabase-provider'
 
-export default function AddForm() {
-	const { supabase, session } = useSupabase()
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
+
+import type { Session } from '@supabase/auth-helpers-nextjs'
+
+export default function AddForm({ session }: { session: Session | null }) {
+	const supabase = createClientComponentClient()
 	const [loading, setLoading] = useState<boolean>(false)
 	const [error, setError] = useState<boolean>(false)
 	const [kilometrage, setKilometrage] = useState<string>('')
