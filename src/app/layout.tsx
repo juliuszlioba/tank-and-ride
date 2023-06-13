@@ -13,6 +13,9 @@ export const metadata = {
 	description: 'Tank and ride Website',
 }
 
+// Prevent default cache method, overwise error during build
+export const dynamic = 'force-dynamic'
+
 export default async function RootLayout({
 	children,
 }: {
@@ -23,6 +26,7 @@ export default async function RootLayout({
 			<body className={`${josefin_sans.className} bg-gray-950 text-gray-200`}>
 				{children}
 				<div className="flex justify-center gap-2 py-12">
+					{/* @ts-ignore */}
 					<Login />
 				</div>
 			</body>
