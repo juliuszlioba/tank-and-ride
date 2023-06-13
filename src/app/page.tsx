@@ -68,25 +68,25 @@ export default async function Home() {
 							{processedData.records.map((item) => {
 								return (
 									<tr key={item.id}>
-										<td className="py-1 pr-2 text-base text-white xs:text-xl md:pr-4 lg:text-2xl">
+										<td className="py-1 pr-2 text-xl text-white md:pr-4 lg:text-2xl">
 											{item.kilometrage}{' '}
 											<span className="text-xs text-gray-600 xs:text-lg">
 												km
 											</span>
 										</td>
-										<td className="px-2 py-1 text-base text-white sm:text-xl md:px-4 lg:text-2xl">
+										<td className="px-2 py-1 text-xl text-white md:px-4 lg:text-2xl">
 											{item.difrence || '-'}{' '}
 											<span className="text-xs text-gray-600 xs:text-lg">
 												km
 											</span>
 										</td>
-										<td className="px-2 py-1 text-base text-white sm:text-xl md:px-4 lg:text-2xl">
+										<td className="px-2 py-1 text-xl text-white  md:px-4 lg:text-2xl">
 											{item.tank_add}{' '}
 											<span className="text-xs text-gray-600 xs:text-lg">
 												l
 											</span>
 										</td>
-										<td className="px-2 py-1 text-base text-white sm:text-xl md:px-4 lg:text-2xl">
+										<td className="px-2 py-1 text-xl text-white md:px-4 lg:text-2xl">
 											{item.consumption ? item.consumption.toFixed(2) : '-'}{' '}
 											<span className="text-xs text-gray-600 xs:text-lg">
 												l/100km

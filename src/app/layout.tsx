@@ -23,7 +23,6 @@ export default async function RootLayout({
 			<body className={`${josefin_sans.className} bg-gray-950 text-gray-200`}>
 				{children}
 				<div className="flex justify-center gap-2 py-12">
-					{/* @ts-expect-error next version of TS will fix this */}
 					<Login />
 				</div>
 			</body>
