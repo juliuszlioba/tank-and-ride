@@ -2,12 +2,15 @@
 
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 
 import type { Session } from '@supabase/auth-helpers-nextjs'
 
 export default function LoginButtons({ session }: { session: Session | null }) {
 	const router = useRouter()
 	const supabase = createClientComponentClient()
+
+	const pathname = usePathname()
 
 	const handleGitHubLogin = async () => {
 		const { error } = await supabase.auth.signInWithOAuth({
@@ -16,20 +19,26 @@ export default function LoginButtons({ session }: { session: Session | null }) {
 				redirectTo: `${process.env.NEXT_PUBLIC_WEBSITE_URL as string}/welcome`,
 			},
 		})
-		router.refresh()
 
 		if (error) {
 			console.log({ error })
 		}
+
+		return router.refresh()
 	}
 
 	const handleLogout = async () => {
 		const { error } = await supabase.auth.signOut()
-		router.refresh()
 
 		if (error) {
 			console.log({ error })
 		}
+
+		return router.refresh()
+	}
+
+	if (pathname === '/welcome') {
+		return null
 	}
 
 	return session ? (
@@ -37,6 +46,7 @@ export default function LoginButtons({ session }: { session: Session | null }) {
 			<div className="flex flex-col justify-center gap-4">
 				<div className="flex items-center gap-2 text-gray-100">
 					{session.user?.user_metadata && (
+						// eslint-disable-next-line @next/next/no-img-element
 						<img
 							src={session.user?.user_metadata.avatar_url}
 							alt="avatar"
