@@ -7,6 +7,8 @@ import { cookies } from 'next/headers'
 
 import type { Database } from '@/lib/database.types'
 
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
 	const supabase = createServerComponentClient<Database>({
 		cookies,

@@ -1,6 +1,8 @@
 import WelcomeMessage from './message'
 import { ContinueButton } from './button'
 
+export const dynamic = 'force-dynamic'
+
 export default function Page() {
 	return (
 		<main className="flex w-full flex-col justify-center gap-4 pt-8">
