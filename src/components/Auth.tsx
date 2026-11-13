@@ -21,8 +21,8 @@ export default async function WebsiteAuth() {
 
   if (!user) {
     return (
-      <div className="flex justify-center p-8">
-        <Button asChild variant="ghost" className="items-end">
+      <div className="flex justify-end p-8">
+        <Button asChild variant="secondary" className="items-end">
           <Link href="/login">Login</Link>
         </Button>
       </div>
@@ -30,10 +30,10 @@ export default async function WebsiteAuth() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center gap-2 p-8">
+    <div className="flex flex-col items-end justify-center gap-2 p-8">
       {user.email}
       <form action={signOut} className="inline-flex">
-        <Button variant="ghost">Logout</Button>
+        <Button variant="secondary">Logout</Button>
       </form>
     </div>
   );
