@@ -2,15 +2,15 @@
 
 # TankAndRide
 
-Small website project to track motorcycle fuel consuption
+Small website project to track motorcycle fuel consumption
 
 Live website > [tank-and-ride.juliuszlioba.com](https://tank-and-ride.juliuszlioba.com/)
 
 ## Installation
 
-Download and install with npm
+Download and install with pnpm
 ```bash
-pnpm clone git@github.com:juliuszlioba/tank-and-ride.git
+git clone git@github.com:juliuszlioba/tank-and-ride.git
 cd tank-and-ride
 pnpm install
 ```
@@ -21,9 +21,9 @@ Before starting development <br>
 pnpm supabase start
 ```
 
-2. fill in enviroment variables
+2. fill in environment variables
 ```bash
-cp .env.example .env
+cp .env.sample .env
 ```
 
 Start developing or poking around!

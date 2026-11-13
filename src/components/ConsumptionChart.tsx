@@ -8,9 +8,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useEffect, useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Button } from "./ui/button";
 import { ChartSpline } from "lucide-react";
+import type { ChartPoint } from "@/lib/records";
+import { cn } from "@/lib/utils";
 
 const chartConfig = {
   kilometrage: {
@@ -23,18 +25,23 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ConsumptionChart({
-  chartData,
-}: {
-  chartData: { kilometrage: number; consumption: number }[];
-}) {
-  const [chartFull, setChartFull] = useState(true);
+const NARROW_QUERY = "(max-width: 723px)";
 
-  useEffect(() => {
-    if (window.innerWidth < 724) {
-      setChartFull(false);
-    }
-  }, []);
+function subscribeToNarrow(onChange: () => void) {
+  const mql = window.matchMedia(NARROW_QUERY);
+  mql.addEventListener("change", onChange);
+  return () => mql.removeEventListener("change", onChange);
+}
+
+export function ConsumptionChart({ chartData }: { chartData: ChartPoint[] }) {
+  // Default to "recent" on narrow screens until the user picks a view.
+  const isNarrow = useSyncExternalStore(
+    subscribeToNarrow,
+    () => window.matchMedia(NARROW_QUERY).matches,
+    () => false,
+  );
+  const [userChoice, setChartFull] = useState<boolean | null>(null);
+  const chartFull = userChoice ?? !isNarrow;
 
   return (
     <div className="space-y-4">
@@ -48,19 +55,24 @@ export function ConsumptionChart({
           }}
         >
           <YAxis
-            tickFormatter={(value) => `${value}`}
             tickMargin={4}
-            ticks={[4, 5, 6, 7, 8, 9]}
             tickLine={true}
             axisLine={false}
-            domain={[3, 10]}
+            allowDecimals={false}
+            // Fit the axis to the data instead of a fixed 3–10 range that
+            // would clip unusually high or low fill-ups.
+            domain={[
+              (min: number) => Math.max(0, Math.floor(min) - 1),
+              (max: number) => Math.ceil(max) + 1,
+            ]}
             width={20}
           />
           <CartesianGrid vertical={false} />
           <ChartTooltip
-            labelFormatter={(value, payload) =>
-              payload[0].payload?.kilometrage + " km"
-            }
+            labelFormatter={(_, payload) => {
+              const km = payload?.[0]?.payload?.kilometrage;
+              return km === undefined ? "" : `${km} km`;
+            }}
             cursor={true}
             content={<ChartTooltipContent hideIndicator label={false} />}
           />
@@ -83,14 +95,14 @@ export function ConsumptionChart({
 
       <div className="flex justify-center gap-2">
         <Button
-          className={`items-end ${chartFull && "text-primary"}`}
+          className={cn("items-end", chartFull && "text-primary")}
           variant={"ghost"}
           onClick={() => setChartFull(true)}
         >
           <ChartSpline strokeWidth={1.5} className="mb-1" /> Full
         </Button>
         <Button
-          className={`items-end ${!chartFull && "text-primary"}`}
+          className={cn("items-end", !chartFull && "text-primary")}
           variant={"ghost"}
           onClick={() => setChartFull(false)}
         >

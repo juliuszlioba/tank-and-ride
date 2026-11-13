@@ -1,13 +1,14 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+"use client";
 
-export default function ErrorPage() {
+import { Button } from "@/components/ui/button";
+
+export default function Error({ reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-2 p-8">
       <p>Sorry, something went wrong</p>
-      <Link href="/">
-        <Button className="pb-1.5 pt-2">Return</Button>
-      </Link>
+      <Button className="pb-1.5 pt-2" onClick={() => reset()}>
+        Try again
+      </Button>
     </div>
   );
 }

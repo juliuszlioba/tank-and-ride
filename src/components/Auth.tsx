@@ -1,35 +1,39 @@
+import Link from "next/link";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
 import { createClient } from "@/utils/supabase/server";
 import { Button } from "./ui/button";
-import Link from "next/link";
+
+async function signOut() {
+  "use server";
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  revalidatePath("/", "layout");
+  redirect("/");
+}
 
 export default async function WebsiteAuth() {
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  const signOut = async () => {
-    "use server";
-    const supabase = await createClient();
-    await supabase.auth.signOut();
-    return;
-  };
-
-  if (!data.user || error) {
+  if (!user) {
     return (
       <div className="flex justify-center p-8">
-        <Link href="/login">
-          <Button variant={"ghost"} className="items-end">
-            Login
-          </Button>
-        </Link>
+        <Button asChild variant="ghost" className="items-end">
+          <Link href="/login">Login</Link>
+        </Button>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col items-center justify-center gap-2 p-8">
-      {data.user.email}
+      {user.email}
       <form action={signOut} className="inline-flex">
-        <Button variant={"ghost"}>Logout</Button>
+        <Button variant="ghost">Logout</Button>
       </form>
     </div>
   );
