@@ -7,8 +7,7 @@ export async function updateSession(request: NextRequest) {
     request,
   });
 
-  // const supabase =
-  createServerClient<Database>(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -39,9 +38,13 @@ export async function updateSession(request: NextRequest) {
   // supabase.auth.getUser(). A simple mistake could make it very hard to debug
   // issues with users being randomly logged out.
 
-  // const {
-  //   data: { user },
-  // } = await supabase.auth.getUser();
+  const { error } = await supabase.auth.getUser();
+
+  // A stale/invalid refresh token (e.g. after the local Supabase DB was reset)
+  // leaves a broken auth cookie behind. Clear it so the user can log in again.
+  if (error?.code === "refresh_token_not_found") {
+    await supabase.auth.signOut({ scope: "local" });
+  }
 
   // if (
   //   !user &&

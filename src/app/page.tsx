@@ -60,7 +60,7 @@ export default async function Home() {
     const { error: resError } = await supabase
       .from("records")
       .delete()
-      .eq("id", data.id);
+      .eq("id", parseInt(data.id));
 
     if (resError) {
       redirect("/error");
